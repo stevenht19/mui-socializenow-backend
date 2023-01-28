@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "target": "ES2016",
     "module": "commonjs",
     "rootDir": "./src",
+    "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     // "baseUrl": "./",
     // "paths": {},
@@ -13,5 +16,7 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*", "types.d.ts"],
+  "files": ["types.d.ts"]
 }

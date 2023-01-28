@@ -1,5 +1,17 @@
 import express from 'express'
+import cors from 'cors'
+import * as mongo from './mongo'
+import { postRoute } from './routes/posts.route'
+import { authRoute } from './routes/auth.route'
 
 const app = express()
 
-app.listen('4000')
+mongo.initialize()
+app.use(cors({
+  origin: 'http://127.0.0.1:5173'
+}))
+app.use(express.json())
+app.use('/posts', postRoute)
+app.use('/auth', authRoute)
+
+app.listen(process.env.PORT || 4000)
