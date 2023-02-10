@@ -20,12 +20,9 @@ export class Post extends TimeStamps {
   @prop({ required: false })
   image: Image
 
-  @prop()
-  likes: Like
-}
+  @prop({ required: false })
+  likes: string[]
 
-type Like = {
-  [key: string]: string
 }
 
 type Image = {
