@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../models';
 import jwt from 'jsonwebtoken'
+import { comparePassword } from '../utils/bcrypt';
 
 const colors = ['#17C964', '#06B7DB', '#9750DD']
 
@@ -17,7 +18,7 @@ export async function signUp(req: Request, res: Response) {
 
   const user = await User.create({
     username,
-    password,
+    password: User.hashPassword(password),
     color: randomColor
   })
 
@@ -25,7 +26,11 @@ export async function signUp(req: Request, res: Response) {
     expiresIn: 2000
   })
 
-  return res.json({ type: 'success', token, user })
+  return res.json({ type: 'success', token,  user: {
+    _id: user.id,
+    username: user.username,
+    color: user.color, 
+  }})
 }
 
 export async function login(req: Request, res: Response) {
@@ -35,7 +40,7 @@ export async function login(req: Request, res: Response) {
 
   if (!user) return res.status(403).send({ type: 'error', error: 'Unauthorized '})
 
-  if (user.password !== password) {
+  if (!comparePassword(password, user.password)) {
     return res.status(403).send({ type: 'error', error: 'Unauthorized '})
   }
 
@@ -43,10 +48,15 @@ export async function login(req: Request, res: Response) {
     expiresIn: 2000
   })
 
-  return res.json({ type: 'sucess', token, user })
+  return res.json({ type: 'sucess', token, user: {
+    _id: user.id,
+    username: user.username,
+    color: user.color, 
+  }})
 }
 
 export async function getAccount(req: Request, res: Response) {
   const user = await User.findOne({ _id: req.user_id })
+  console.log(user.id)
   return res.json({ type: 'sucess', user })
 }
