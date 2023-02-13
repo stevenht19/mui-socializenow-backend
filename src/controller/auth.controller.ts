@@ -2,8 +2,7 @@ import { Request, Response } from 'express'
 import { User } from '../models';
 import jwt from 'jsonwebtoken'
 import { comparePassword } from '../utils/bcrypt';
-
-const colors = ['#17C964', '#06B7DB', '#9750DD']
+import { colors } from '../utils/colors';
 
 export async function signUp(req: Request, res: Response) {
   const { username, password } = req.body
@@ -57,6 +56,5 @@ export async function login(req: Request, res: Response) {
 
 export async function getAccount(req: Request, res: Response) {
   const user = await User.findOne({ _id: req.user_id })
-  console.log(user.id)
   return res.json({ type: 'sucess', user })
 }
