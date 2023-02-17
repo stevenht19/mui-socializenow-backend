@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { uploadImage } from '../cloudinary';
+import { UnauthorizedException } from '../exceptions';
 import { Comment, Post } from '../models';
 
 export async function findAll(req: Request, res: Response) {
@@ -12,7 +13,6 @@ export async function findAll(req: Request, res: Response) {
 export async function findAllByUserId(req: Request, res: Response) {
   const { id } = req.params
   const posts = await Post.find({ author: id }).populate('author')
-
   return res.json(posts)
 }
 
@@ -20,7 +20,7 @@ export async function create(req: Request, res: Response) {
   const { author, text, feeling } = req.body
   
   if (req.user_id !== author) {
-    return res.status(401).json({ error: 'Unauthorized '})
+    throw new UnauthorizedException()
   }
 
   const post = new Post({
@@ -79,7 +79,7 @@ export async function createComment(req: Request, res: Response) {
   const { text, author } = req.body
 
   if (userId !== author) {
-    return res.status(401).json({ error: 'Unauthorized' })
+    throw new UnauthorizedException()
   }
 
   const post = await Post.findById(id)
@@ -97,8 +97,8 @@ export async function createComment(req: Request, res: Response) {
 }
 
 export async function likeComment(req: Request, res: Response) {
-  const userId = req.user_id
   const { id } = req.params
+  const userId = req.user_id
   const commentToLike = await Comment.findById(id)
   
   if (commentToLike.likes.some((commentUserId) => userId === commentUserId)) {
@@ -108,5 +108,6 @@ export async function likeComment(req: Request, res: Response) {
   }
 
   const comment = await commentToLike.save()
+  
   res.json(comment)
 }
