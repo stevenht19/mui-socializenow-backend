@@ -3,8 +3,9 @@ import { UploadedFile } from 'express-fileupload';
 import { uploadImage } from '../cloudinary';
 import { Comment, Post } from '../models';
 
-export async function findAll(_req: Request, res: Response) {
-  const posts = await Post.find().populate('author')
+export async function findAll(req: Request, res: Response) {
+  const { page } = req.query
+  const posts = await Post.paginate({}, { page: Number(page), limit: 6, populate: 'author' })
   return res.json(posts)
 }
 
@@ -18,6 +19,10 @@ export async function findAllByUserId(req: Request, res: Response) {
 export async function create(req: Request, res: Response) {
   const { author, text, feeling } = req.body
   
+  if (req.user_id !== author) {
+    return res.status(401).json({ error: 'Unauthorized '})
+  }
+
   const post = new Post({
     author,
     text,

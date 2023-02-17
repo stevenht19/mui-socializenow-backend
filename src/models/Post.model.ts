@@ -1,8 +1,11 @@
-import { modelOptions, prop, Ref, Severity } from '@typegoose/typegoose';
+import { modelOptions, plugin, prop, Ref, Severity } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Comment } from './Comment.model';
 import { User } from './User.model';
+import { PaginateMethod } from './types';
+import paginator from 'mongoose-paginate-v2'
 
+@plugin(paginator)
 @modelOptions({
   options: {
     allowMixed: Severity.ALLOW
@@ -10,25 +13,27 @@ import { User } from './User.model';
 })
 export class Post extends TimeStamps {
   @prop({ required: true })
-  text: string
+  text: string;
 
   @prop({ ref: () => User })
-  author: Ref<User>
+  author: Ref<User>;
 
   @prop()
-  feeling: string
+  feeling: string;
 
   @prop()
-  image?: Image
+  image?: Image;
 
   @prop()
-  likes: string[]
+  likes: string[];
 
   @prop()
-  totalComments: number
+  totalComments: number;
 
   @prop({ ref: () => Comment })
-  comments: Ref<Comment>[]
+  comments: Ref<Comment>[];
+
+  static paginate: PaginateMethod<Post>;
 }
 
 

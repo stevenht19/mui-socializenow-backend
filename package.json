@@ -19,11 +19,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "4.18.2",
-    "express-fileupload": "^1.4.0",
+    "express-fileupload": "1.4.0",
+    "express-validator": "^6.14.3",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "4.13.0",
     "mongoose": "6.9.0",
-    "sharp": "^0.31.3"
+    "mongoose-paginate-v2": "^1.7.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
