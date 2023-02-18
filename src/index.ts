@@ -1,12 +1,13 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import fileUpload from 'express-fileupload'
-import * as mongo from './mongo'
-import { postRoute } from './routes/posts.route'
-import { authRoute } from './routes/auth.route'
-import { usersRoute } from './routes/users.route'
-import { handler } from './exceptions/handler'
+import 'express-async-errors';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import fileUpload from 'express-fileupload';
+import * as mongo from './mongo';
+import { postRoute } from './routes/posts.route';
+import { authRoute } from './routes/auth.route';
+import { usersRoute } from './routes/users.route';
+import { handler } from './exceptions/handler';
 
 dotenv.config()
 const app = express()

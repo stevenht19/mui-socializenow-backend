@@ -32,7 +32,9 @@ export async function create(req: Request, res: Response) {
 
   if (req.files?.image) {
     const file = req.files.image as UploadedFile
+    console.log(file.tempFilePath)
     const { public_id, secure_url } = await uploadImage(file.tempFilePath)
+    console.log(public_id, secure_url)
     post.image = {
       public_id,
       secure_url

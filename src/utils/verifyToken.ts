@@ -2,10 +2,15 @@ import { Request, Response, NextFunction } from 'express'
 import { verify, JwtPayload } from 'jsonwebtoken'
 import { UnauthorizedException } from '../exceptions'
 import { User } from '../models'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 interface JwtResponse extends JwtPayload {
   id: string
 }
+
+console.log(process.env.JWT_SECRET, 'secrent')
 
 export async function verifyToken(req: Request, _res: Response, next: NextFunction) {
   try {

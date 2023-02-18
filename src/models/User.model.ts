@@ -1,6 +1,9 @@
-import { prop } from '@typegoose/typegoose';
+import { prop, plugin } from '@typegoose/typegoose';
 import { hashPassword } from '../utils/bcrypt';
+import { PaginateMethod } from './types';
+import paginator from 'mongoose-paginate-v2';
 
+@plugin(paginator)
 export class User {
   @prop({ required: true })
   username: string
@@ -23,4 +26,6 @@ export class User {
   static hashPassword(password: string) {
     return hashPassword(password)
   }
+
+  static paginate: PaginateMethod<User>;
 }

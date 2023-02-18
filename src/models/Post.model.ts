@@ -19,7 +19,7 @@ export class Post extends TimeStamps {
   author: Ref<User>;
 
   @prop()
-  feeling: string;
+  feeling?: string;
 
   @prop()
   image?: Image;
