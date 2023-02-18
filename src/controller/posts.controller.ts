@@ -1,13 +1,25 @@
 import { Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { uploadImage } from '../cloudinary';
-import { UnauthorizedException } from '../exceptions';
+import { BadRequestException, UnauthorizedException } from '../exceptions';
 import { Comment, Post } from '../models';
 
 export async function findAll(req: Request, res: Response) {
-  const { page } = req.query
-  const posts = await Post.paginate({}, { page: Number(page), limit: 6, populate: 'author' })
-  return res.json(posts)
+  try {
+    const { page, offset } = req.query
+    const posts = await Post.paginate({}, { 
+      page: Number(page),
+      limit: 6,
+      offset: Number(offset),
+      populate: 'author',
+      sort: {
+        createdAt: -1
+      }
+    })
+    return res.json(posts) 
+  } catch (error) {
+    throw new BadRequestException()
+  }
 }
 
 export async function findAllByUserId(req: Request, res: Response) {
@@ -32,9 +44,7 @@ export async function create(req: Request, res: Response) {
 
   if (req.files?.image) {
     const file = req.files.image as UploadedFile
-    console.log(file.tempFilePath)
     const { public_id, secure_url } = await uploadImage(file.tempFilePath)
-    console.log(public_id, secure_url)
     post.image = {
       public_id,
       secure_url

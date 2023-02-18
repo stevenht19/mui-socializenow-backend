@@ -10,8 +10,6 @@ interface JwtResponse extends JwtPayload {
   id: string
 }
 
-console.log(process.env.JWT_SECRET, 'secrent')
-
 export async function verifyToken(req: Request, _res: Response, next: NextFunction) {
   try {
 
