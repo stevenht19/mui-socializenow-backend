@@ -14,7 +14,7 @@ const app = express()
 
 mongo.initialize()
 app.use(cors({
-  origin: 'http://127.0.0.1:5173'
+  origin: process.env.SITE_FRONTEND_URL
 }))
 app.use(express.json())
 app.use(fileUpload({
